@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>KindGuard — Instant Demo</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,500;0,600;0,700;1,600&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#FAF6F0; --surface:#FFFFFF; --surface-alt:#F3EAD9; --border:#E5D8C4;
+    --text:#2E2620; --text-muted:#8A7A66;
+    --teal:#146A64; --teal-hover:#0F5651; --teal-light:#E1F0EC;
+    --gold:#B98A2E; --gold-light:#FBF1DD;
+    --coral:#C1503D; --coral-light:#FBEAE6;
+    --font-display:'Fraunces',Georgia,serif; --font-body:'Inter','Segoe UI',sans-serif; --font-mono:'JetBrains Mono','Courier New',monospace;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  body{background:var(--bg); color:var(--text); font-family:var(--font-body); line-height:1.6;}
+  a{color:inherit; text-decoration:none; cursor:pointer;}
+  .wrap{max-width:1180px; margin:0 auto; padding:0 32px;}
+  .view{display:none;}
+  .view.active{display:block;}
+  button{font-family:var(--font-body); cursor:pointer;}
+
+  .demo-banner{background:var(--text); color:var(--bg); text-align:center; font-family:var(--font-mono); font-size:11.5px; padding:8px 12px;}
+  .demo-banner b{color:var(--gold);}
+
+  header{display:flex; align-items:center; justify-content:space-between; padding:22px 0; border-bottom:1px solid var(--border);}
+  .logo{display:flex; align-items:center; gap:12px;}
+  .logo-text{display:flex; flex-direction:column; line-height:1.15;}
+  .logo-word{font-family:var(--font-display); font-weight:700; font-size:20px;}
+  .logo-tag{font-family:var(--font-mono); font-size:8.5px; color:var(--text-muted); letter-spacing:.08em;}
+  nav{display:flex; gap:30px; font-size:14.5px; color:var(--text-muted);}
+  nav a{padding:6px 2px; border-bottom:2px solid transparent; transition:.15s;}
+  nav a:hover, nav a.current{color:var(--teal); border-color:var(--teal);}
+  .nav-cta{background:var(--teal); color:#FFFDF9; font-weight:600; font-size:14px; padding:10px 20px; border-radius:8px; border:none; transition:.15s;}
+  .nav-cta:hover{background:var(--teal-hover); transform:translateY(-1px);}
+
+  .brandmark{overflow:visible;}
+  .bm-compass{transform-origin:60px 60px; animation:bm-rotate 14s linear infinite;}
+  .bm-ring{fill:none; stroke:var(--border); stroke-width:1.5; stroke-dasharray:2 5;}
+  .bm-ticks line{stroke:var(--teal); stroke-width:2; opacity:.7;}
+  .bm-needle{fill:var(--gold);}
+  .bm-shield-fill{fill:var(--surface); stroke:var(--teal); stroke-width:2.5; animation:bm-glow 2.8s ease-in-out infinite;}
+  .bm-pulse-line{fill:none; stroke:var(--gold); stroke-width:2.5; stroke-linecap:round; stroke-linejoin:round;}
+  @keyframes bm-rotate{from{transform:rotate(0);} to{transform:rotate(360deg);}}
+  @keyframes bm-glow{0%,100%{filter:drop-shadow(0 0 1px rgba(20,106,100,.2));} 50%{filter:drop-shadow(0 0 8px rgba(185,138,46,.55));}}
+
+  .hero{display:grid; grid-template-columns:1fr 1fr; gap:60px; align-items:center; padding:64px 0 84px;}
+  .eyebrow{display:inline-flex; align-items:center; gap:8px; font-family:var(--font-mono); font-size:11.5px; letter-spacing:.06em; color:var(--teal); background:var(--teal-light); border:1px solid rgba(20,106,100,.2); padding:6px 12px; border-radius:20px; margin-bottom:22px;}
+  .eyebrow .dot{width:6px; height:6px; border-radius:50%; background:var(--teal); animation:blink 1.6s infinite;}
+  @keyframes blink{0%,100%{opacity:1;} 50%{opacity:.3;}}
+  h1{font-family:var(--font-display); font-weight:600; font-size:46px; line-height:1.12; letter-spacing:-.01em; margin-bottom:20px;}
+  .accent{color:var(--teal); font-style:italic;}
+  .sub{color:var(--text-muted); font-size:16.5px; max-width:460px; margin-bottom:32px;}
+  .scan-box{display:flex; align-items:center; background:var(--surface); border:1px solid var(--border); border-radius:10px; padding:6px; max-width:460px;}
+  .scan-box input{flex:1; background:transparent; border:none; outline:none; color:var(--text); font-family:var(--font-mono); font-size:14px; padding:12px 14px;}
+  .scan-btn{background:var(--teal); color:#FFFDF9; border:none; font-weight:600; font-size:14px; padding:12px 22px; border-radius:7px; white-space:nowrap; transition:.15s;}
+  .scan-btn:hover{background:var(--teal-hover); transform:translateY(-1px);}
+  .scan-btn:disabled{opacity:.6; cursor:not-allowed;}
+  .fine{font-size:12.5px; color:var(--text-muted); margin-top:12px; font-family:var(--font-mono);}
+
+  .pulse-panel{background:var(--surface); border:1px solid var(--border); border-radius:14px; padding:28px; position:relative; overflow:hidden;}
+  .pulse-head{display:flex; justify-content:space-between; font-family:var(--font-mono); font-size:11.5px; color:var(--text-muted); margin-bottom:22px;}
+  .pulse-head .url{color:var(--teal);}
+  .pulse-track{position:relative; height:150px; margin-bottom:8px;}
+  .track-line{position:absolute; top:50%; left:0; right:0; height:1px; background:var(--border);}
+  .sweep{position:absolute; top:0; bottom:0; width:2px; background:linear-gradient(180deg,transparent,var(--teal),transparent); animation:sweep 1.8s linear infinite;}
+  @keyframes sweep{0%{left:0;} 100%{left:100%;}}
+  .nodes{position:absolute; top:50%; left:0; right:0; display:flex; justify-content:space-between; transform:translateY(-50%);}
+  .node{display:flex; flex-direction:column; align-items:center; gap:10px; width:70px;}
+  .node-dot{width:14px; height:14px; border-radius:50%; background:var(--surface-alt); border:2px solid var(--border); transition:background .3s, border-color .3s;}
+  .node-label{font-family:var(--font-mono); font-size:10px; color:var(--text-muted); text-align:center;}
+  .pulse-readout{font-family:var(--font-mono); font-size:12px; color:var(--text-muted); display:flex; justify-content:space-between; border-top:1px solid var(--border); padding-top:16px; margin-top:14px;}
+  .pulse-readout b{color:var(--teal);}
+  .node-dot.st-pass{background:var(--teal); border-color:var(--teal);}
+  .node-dot.st-warn{background:var(--gold); border-color:var(--gold);}
+  .node-dot.st-fail{background:var(--coral); border-color:var(--coral);}
+
+  .people-block{padding:20px 0 84px; border-top:1px solid var(--border);}
+  .section-tag{font-family:var(--font-mono); font-size:11.5px; color:var(--teal); letter-spacing:.08em; margin-bottom:10px;}
+  .people-grid{display:grid; grid-template-columns:.9fr 1.1fr; gap:50px; align-items:center; margin-top:34px;}
+  .people-photo{position:relative; border-radius:16px; overflow:hidden; aspect-ratio:4/3; min-height:300px; background:linear-gradient(135deg,#d8c9a8,#c7ad7a);}
+  .people-copy h2{font-family:var(--font-display); font-weight:600; font-size:27px; margin-bottom:14px; line-height:1.25;}
+  .people-copy p{color:var(--text-muted); font-size:15px; margin-bottom:18px;}
+  .people-point{display:flex; gap:10px; font-size:14px; margin-bottom:12px;}
+  .people-point .mark{color:var(--teal); font-weight:700;}
+
+  section.block{padding:60px 0 90px; border-top:1px solid var(--border);}
+  .block h2{font-family:var(--font-display); font-weight:600; font-size:28px; margin-bottom:40px; max-width:620px;}
+  .feat-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:20px;}
+  .feat-card{background:var(--surface); border:1px solid var(--border); border-radius:12px; padding:26px; transition:.15s;}
+  .feat-card:hover{box-shadow:0 8px 20px rgba(46,38,32,.07); transform:translateY(-2px);}
+  .feat-icon{width:36px; height:36px; border-radius:8px; background:var(--teal-light); border:1px solid rgba(20,106,100,.2); display:flex; align-items:center; justify-content:center; color:var(--teal); font-family:var(--font-mono); font-weight:700; font-size:14px; margin-bottom:16px;}
+  .feat-card h3{font-family:var(--font-display); font-weight:600; font-size:16.5px; margin-bottom:8px;}
+  .feat-card p{font-size:13.5px; color:var(--text-muted);}
+
+  .ghost-btn{background:transparent; border:1px solid var(--border); color:var(--text-muted); padding:9px 16px; border-radius:7px; font-size:13.5px; font-weight:600; transition:.15s;}
+  .ghost-btn:hover{border-color:var(--teal); color:var(--teal);}
+  .results-actions{display:flex; gap:10px; padding-top:24px;}
+  .results-top{display:grid; grid-template-columns:1fr 1fr; gap:20px; padding:50px 0 30px;}
+  .score-strip{background:var(--surface); border:1px solid var(--border); border-radius:14px; padding:30px 34px; display:flex; align-items:center;}
+  .score-left{display:flex; align-items:center; gap:22px;}
+  .score-ring{width:84px; height:84px; border-radius:50%; display:flex; align-items:center; justify-content:center;}
+  .score-ring-inner{width:66px; height:66px; border-radius:50%; background:var(--surface); display:flex; flex-direction:column; align-items:center; justify-content:center;}
+  .score-ring-inner b{font-family:var(--font-display); font-size:20px; color:var(--teal);}
+  .score-ring-inner span{font-size:9px; color:var(--text-muted);}
+  .score-text b{font-family:var(--font-display); font-weight:600; font-size:16px; display:block; margin-bottom:4px;}
+  .score-text span{font-size:13px; color:var(--text-muted);}
+  .checklist{padding:20px 0 80px;}
+  .checklist h2{font-family:var(--font-display); font-weight:600; font-size:26px; margin-bottom:26px;}
+  .check-row{display:grid; grid-template-columns:140px 1fr; gap:20px; background:var(--surface); border:1px solid var(--border); border-left:3px solid var(--border); border-radius:10px; padding:18px 20px; margin-bottom:12px;}
+  .check-row.st-pass{border-left-color:var(--teal);} .check-row.st-warn{border-left-color:var(--gold);} .check-row.st-fail{border-left-color:var(--coral);}
+  .check-status{font-family:var(--font-mono); font-size:12px; font-weight:700;}
+  .check-row.st-pass .check-status{color:var(--teal);} .check-row.st-warn .check-status{color:var(--gold);} .check-row.st-fail .check-status{color:var(--coral);}
+  .check-title{font-family:var(--font-display); font-weight:600; font-size:15px; margin-bottom:6px;}
+  .check-detail{font-size:13.5px; color:var(--text-muted); margin-bottom:8px;}
+  .check-fix{font-size:12.5px; font-family:var(--font-mono); color:var(--teal);}
+
+  .stats-grid{display:grid; grid-template-columns:repeat(4,1fr); gap:16px; margin-bottom:20px;}
+  .stat-card{background:var(--surface); border:1px solid var(--border); border-radius:12px; padding:20px;}
+  .stat-label{display:block; font-family:var(--font-mono); font-size:11px; color:var(--text-muted); margin-bottom:10px;}
+  .stat-value{font-family:var(--font-display); font-size:26px; font-weight:600;}
+  .stat-value.danger{color:var(--coral);}
+  .history-table{background:var(--surface); border:1px solid var(--border); border-radius:12px; overflow:hidden;}
+  .history-row{display:grid; grid-template-columns:2fr 1fr 1.2fr 1fr; gap:12px; padding:15px 20px; align-items:center; font-size:13.5px;}
+  .history-row+.history-row{border-top:1px solid var(--border);}
+  .history-head{font-family:var(--font-mono); font-size:10.5px; color:var(--text-muted);}
+  .history-row.clickable:hover{background:var(--surface-alt); cursor:pointer;}
+  .mono{font-family:var(--font-mono); font-size:13px;}
+  .badge{font-family:var(--font-mono); font-size:11px; padding:5px 9px; border-radius:6px; border:1px solid; width:fit-content;}
+  .badge.ok{color:var(--teal); border-color:rgba(20,106,100,.25); background:var(--teal-light);}
+  .badge.warn{color:var(--gold); border-color:rgba(185,138,46,.3); background:var(--gold-light);}
+  .badge.fail{color:var(--coral); border-color:rgba(193,80,61,.3); background:var(--coral-light);}
+  .dash-empty{background:var(--surface); border:1px solid var(--border); border-radius:12px; padding:50px; text-align:center; color:var(--text-muted);}
+
+  .premium-hero{text-align:center; padding:70px 0 20px; display:flex; flex-direction:column; align-items:center;}
+  .premium-hero h1{font-family:var(--font-display); font-size:34px; font-weight:600; margin:20px 0 10px;}
+  .pricing-block{padding:50px 0 90px; display:flex; flex-direction:column; align-items:center;}
+  .pricing-grid{display:grid; grid-template-columns:1fr 1fr; gap:20px; max-width:720px; width:100%;}
+  .price-card{background:var(--surface); border:1px solid var(--border); border-radius:14px; padding:30px; position:relative;}
+  .price-card.featured{border:2px solid var(--teal);}
+  .price-badge{position:absolute; top:-12px; left:24px; background:var(--gold); color:#3A2A08; font-family:var(--font-mono); font-size:10.5px; font-weight:700; padding:4px 10px; border-radius:5px;}
+  .price-name{font-family:var(--font-mono); font-size:12px; color:var(--text-muted); margin-bottom:10px;}
+  .price-amount{font-family:var(--font-display); font-size:30px; font-weight:600; margin-bottom:20px;}
+  .price-amount span{font-size:14px; color:var(--text-muted); font-weight:400; font-family:var(--font-body);}
+  .price-features{list-style:none; margin-bottom:26px;}
+  .price-features li{font-size:13.5px; color:var(--text-muted); padding:8px 0; border-top:1px solid var(--border);}
+  .price-features li:first-child{border-top:none;}
+  .price-features li::before{content:"✓ "; color:var(--teal); font-weight:700;}
+  .pricing-note{color:var(--text-muted); font-size:12.5px; font-family:var(--font-mono); max-width:500px; text-align:center; margin-top:24px;}
+
+  .contact-block{padding:50px 0 90px;}
+  .contact-grid{display:grid; grid-template-columns:.7fr .7fr 1.1fr; gap:20px;}
+  .contact-photo{border-radius:14px; min-height:260px; background:linear-gradient(200deg,#7fb3ae,#e0c37a);}
+  .contact-info{background:var(--surface); border:1px solid var(--border); border-radius:14px; padding:26px; height:fit-content;}
+  .contact-item{padding:14px 0; border-top:1px solid var(--border);}
+  .contact-item:first-child{border-top:none; padding-top:0;}
+  .contact-label{display:block; font-family:var(--font-mono); font-size:10.5px; color:var(--text-muted); margin-bottom:6px;}
+  .contact-form{background:var(--surface); border:1px solid var(--border); border-radius:14px; padding:26px; display:flex; flex-direction:column; gap:12px;}
+  .contact-form input, .contact-form textarea{background:var(--bg); border:1px solid var(--border); border-radius:8px; padding:12px 14px; color:var(--text); font-family:var(--font-body); font-size:14px; outline:none;}
+  .contact-form textarea{resize:vertical; min-height:90px;}
+  .form-success{color:var(--teal); font-size:13px; font-family:var(--font-mono);}
+
+  footer{border-top:1px solid var(--border); padding:28px 0; text-align:center; font-family:var(--font-mono); font-size:11.5px; color:var(--text-muted); margin-top:40px;}
+
+  @media (max-width:860px){ .hero,.people-grid,.results-top{grid-template-columns:1fr;} .feat-grid,.pricing-grid{grid-template-columns:1fr;} .contact-grid{grid-template-columns:1fr;} }
+</style>
+</head>
+<body>
+
+<div class="demo-banner">You're viewing the <b>instant offline demo</b> — scan results here are simulated. The real backend (in the code zip) actually checks live websites.</div>
+
+<div class="wrap">
+  <header>
+    <a class="logo" onclick="go('home')">
+      <svg class="brandmark" width="34" height="34" viewBox="0 0 120 120">
+        <g class="bm-compass"><circle cx="60" cy="60" r="52" class="bm-ring"/><g class="bm-ticks">
+          <line x1="60" y1="10" x2="60" y2="18" transform="rotate(0 60 60)"/><line x1="60" y1="10" x2="60" y2="18" transform="rotate(30 60 60)"/>
+          <line x1="60" y1="10" x2="60" y2="18" transform="rotate(60 60 60)"/><line x1="60" y1="10" x2="60" y2="18" transform="rotate(90 60 60)"/>
+          <line x1="60" y1="10" x2="60" y2="18" transform="rotate(120 60 60)"/><line x1="60" y1="10" x2="60" y2="18" transform="rotate(150 60 60)"/>
+          <line x1="60" y1="10" x2="60" y2="18" transform="rotate(180 60 60)"/><line x1="60" y1="10" x2="60" y2="18" transform="rotate(210 60 60)"/>
+          <line x1="60" y1="10" x2="60" y2="18" transform="rotate(240 60 60)"/><line x1="60" y1="10" x2="60" y2="18" transform="rotate(270 60 60)"/>
+          <line x1="60" y1="10" x2="60" y2="18" transform="rotate(300 60 60)"/><line x1="60" y1="10" x2="60" y2="18" transform="rotate(330 60 60)"/>
+        </g><polygon points="60,14 65,26 55,26" class="bm-needle"/></g>
+        <g><path d="M60,28 L82,37 L82,58 C82,76 71,87 60,93 C49,87 38,76 38,58 L38,37 Z" class="bm-shield-fill"/>
+        <polyline points="42,63 50,63 54,53 60,72 66,58 71,63 78,63" class="bm-pulse-line"/></g>
+      </svg>
+      <div class="logo-text"><span class="logo-word">KindGuard</span><span class="logo-tag">SME SHIELD PROGRAM</span></div>
+    </a>
+    <nav>
+      <a onclick="go('dashboard')" id="nav-dashboard">Dashboard</a>
+      <a onclick="go('premium')" id="nav-premium">Premium</a>
+      <a onclick="go('contact')" id="nav-contact">Contact</a>
+    </nav>
+    <button class="nav-cta" onclick="go('home')">Scan your site</button>
+  </header>
+
+  <!-- HOME -->
+  <div class="view active" id="view-home">
+    <section class="hero">
+      <div>
+        <div class="eyebrow"><span class="dot"></span>LIVE SCAN ENGINE (SIMULATED)</div>
+        <h1>Know your site's<br><span class="accent">security pulse</span><br>before anyone else does.</h1>
+        <p class="sub">Scan any website in seconds. See if it's been hacked, how strong its defenses are, and exactly what to fix to meet EU-grade security standards.</p>
+        <form class="scan-box" onsubmit="return startScan(event)">
+          <input type="text" id="scan-input" placeholder="yourbusiness.com" value="yourbusiness.com" />
+          <button class="scan-btn" id="scan-submit" type="submit">Run scan →</button>
+        </form>
+        <div class="fine">No signup required · 3 free scans a month · demo data below</div>
+      </div>
+      <div class="pulse-panel">
+        <div class="pulse-head"><span id="pulse-status">SCANNING <span class="url" id="pulse-url">yourbusiness.com</span></span><span id="pulse-timer">0.0s</span></div>
+        <div class="pulse-track">
+          <div class="track-line"></div>
+          <div class="sweep" id="sweep"></div>
+          <div class="nodes" id="nodes">
+            <div class="node"><div class="node-dot" data-k="ssl"></div><div class="node-label">SSL/TLS</div></div>
+            <div class="node"><div class="node-dot" data-k="headers"></div><div class="node-label">HEADERS</div></div>
+            <div class="node"><div class="node-dot" data-k="malware"></div><div class="node-label">MALWARE</div></div>
+            <div class="node"><div class="node-dot" data-k="blacklist"></div><div class="node-label">BLACKLIST</div></div>
+            <div class="node"><div class="node-dot" data-k="eu"></div><div class="node-label">EU CHECK</div></div>
+          </div>
+        </div>
+        <div class="pulse-readout"><span>5 checkpoints</span><span id="pulse-readout-right"><b>0 threats</b> detected so far</span></div>
+      </div>
+    </section>
+
+    <section class="people-block">
+      <div class="section-tag">WHO IT'S FOR</div>
+      <div class="people-grid">
+        <div class="people-photo"></div>
+        <div>
+          <h2>Built for the shop owner, not the IT department.</h2>
+          <p>You don't need to know what SSL stands for. You just need to know if your site is safe, and what to do if it isn't. That's the whole job.</p>
+          <div class="people-point"><span class="mark">✓</span> Plain-language reports, no jargon</div>
+          <div class="people-point"><span class="mark">✓</span> Three free scans every month, no card required</div>
+          <div class="people-point"><span class="mark">✓</span> A real person to talk to when you're stuck</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="block">
+      <div class="section-tag">WHAT KINDGUARD CHECKS</div>
+      <h2>Five checkpoints. One plain-language score.</h2>
+      <div class="feat-grid">
+        <div class="feat-card"><div class="feat-icon">01</div><h3>Hack &amp; malware detection</h3><p>Flags if your site is already compromised, defaced, or listed on a malware/blacklist database.</p></div>
+        <div class="feat-card"><div class="feat-icon">02</div><h3>Encryption strength</h3><p>Checks your SSL/TLS certificate setup and flags weak or expiring configurations.</p></div>
+        <div class="feat-card"><div class="feat-icon">03</div><h3>Security headers</h3><p>Verifies the browser-level protections that stop common attacks before they start.</p></div>
+        <div class="feat-card"><div class="feat-icon">04</div><h3>Domain reputation</h3><p>Looks up blacklist status and domain trust signals used by browsers and search engines.</p></div>
+        <div class="feat-card"><div class="feat-icon">05</div><h3>EU-aligned checklist</h3><p>Maps findings to the baseline expectations in EU digital-resilience regulation, in plain language.</p></div>
+        <div class="feat-card"><div class="feat-icon">06</div><h3>Fix-it action plan</h3><p>Every issue comes with a short, non-technical explanation and next step, no jargon.</p></div>
+      </div>
+    </section>
+  </div>
+
+  <!-- RESULTS -->
+  <div class="view" id="view-results">
+    <div class="results-actions"><a class="ghost-btn" onclick="go('home')">New scan</a><a class="ghost-btn" onclick="go('dashboard')">View dashboard</a></div>
+    <section class="results-top">
+      <div class="pulse-panel">
+        <div class="pulse-head"><span>SCAN COMPLETE <span class="url" id="r-url"></span></span><span id="r-elapsed"></span></div>
+        <div class="pulse-track">
+          <div class="track-line"></div>
+          <div class="nodes" id="r-nodes"></div>
+        </div>
+        <div class="pulse-readout"><span>5 checkpoints</span><span id="r-readout"></span></div>
+      </div>
+      <div class="score-strip">
+        <div class="score-left">
+          <div class="score-ring" id="r-ring"><div class="score-ring-inner"><b id="r-score"></b><span id="r-grade"></span></div></div>
+          <div class="score-text"><b id="r-url2"></b><span>Scanned just now (simulated)</span></div>
+        </div>
+      </div>
+    </section>
+    <section class="checklist">
+      <div class="section-tag">FULL REPORT</div>
+      <h2>What we found</h2>
+      <div id="r-checklist"></div>
+    </section>
+  </div>
+
+  <!-- DASHBOARD -->
+  <div class="view" id="view-dashboard">
+    <section class="block" style="border-top:none;">
+      <div class="section-tag">DASHBOARD</div>
+      <h2>Every scan, tracked in one place.</h2>
+      <div class="stats-grid" id="d-stats"></div>
+      <div id="d-table-wrap"></div>
+    </section>
+  </div>
+
+  <!-- PREMIUM -->
+  <div class="view" id="view-premium">
+    <section class="premium-hero">
+      <svg class="brandmark" width="72" height="72" viewBox="0 0 120 120">
+        <g class="bm-compass"><circle cx="60" cy="60" r="52" class="bm-ring"/><g class="bm-ticks">
+          <line x1="60" y1="10" x2="60" y2="18" transform="rotate(0 60 60)"/><line x1="60" y1="10" x2="60" y2="18" transform="rotate(30 60 60)"/>
+          <line x1="60" y1="10" x2="60" y2="18" transform="rotate(60 60 60)"/><line x1="60" y1="10" x2="60" y2="18" transform="rotate(90 60 60)"/>
+          <line x1="60" y1="10" x2="60" y2="18" transform="rotate(120 60 60)"/><line x1="60" y1="10" x2="60" y2="18" transform="rotate(150 60 60)"/>
+          <line x1="60" y1="10" x2="60" y2="18" transform="rotate(180 60 60)"/><line x1="60" y1="10" x2="60" y2="18" transform="rotate(210 60 60)"/>
+          <line x1="60" y1="10" x2="60" y2="18" transform="rotate(240 60 60)"/><line x1="60" y1="10" x2="60" y2="18" transform="rotate(270 60 60)"/>
+          <line x1="60" y1="10" x2="60" y2="18" transform="rotate(300 60 60)"/><line x1="60" y1="10" x2="60" y2="18" transform="rotate(330 60 60)"/>
+        </g><polygon points="60,14 65,26 55,26" class="bm-needle"/></g>
+        <g><path d="M60,28 L82,37 L82,58 C82,76 71,87 60,93 C49,87 38,76 38,58 L38,37 Z" class="bm-shield-fill"/>
+        <polyline points="42,63 50,63 54,53 60,72 66,58 71,63 78,63" class="bm-pulse-line"/></g>
+      </svg>
+      <h1>KindGuard Premium</h1>
+      <p class="sub" style="color:var(--text-muted); max-width:480px;">For businesses that need more than a once-off check, ongoing monitoring, deeper reports, and a direct line to security help.</p>
+    </section>
+    <section class="pricing-block">
+      <div class="pricing-grid">
+        <div class="price-card"><div class="price-name">FREE</div><div class="price-amount">₦0</div>
+          <ul class="price-features"><li>3 scans per month</li><li>Full security report</li><li>EU-aligned checklist</li></ul>
+          <button class="ghost-btn" style="width:100%;" disabled>Current plan</button></div>
+        <div class="price-card featured"><div class="price-badge">MOST POPULAR</div><div class="price-name">PREMIUM</div>
+          <div class="price-amount">Custom<span> — talk to us</span></div>
+          <ul class="price-features"><li>Unlimited scans</li><li>Scheduled monitoring + email alerts</li><li>Downloadable PDF reports</li><li>Priority security assistance</li></ul>
+          <button class="scan-btn" style="width:100%;" onclick="go('contact')">Talk to us →</button></div>
+      </div>
+      <p class="pricing-note">Self-serve billing isn't wired up yet. Reach out on the contact page and we'll set your account up manually while we build that out.</p>
+    </section>
+  </div>
+
+  <!-- CONTACT -->
+  <div class="view" id="view-contact">
+    <section class="contact-block">
+      <div class="section-tag">CONTACT</div>
+      <h2>Need hands-on help securing your site?</h2>
+      <div class="contact-grid">
+        <div class="contact-photo"></div>
+        <div class="contact-info">
+          <div class="contact-item"><span class="contact-label">EMAIL</span><span class="mono">hello@kindguard.app</span></div>
+          <div class="contact-item"><span class="contact-label">WHATSAPP</span><span class="mono">+234 000 000 0000</span></div>
+          <div class="contact-item"><span class="contact-label">RESPONSE TIME</span><span>Within 1 business day</span></div>
+        </div>
+        <form class="contact-form" onsubmit="return sendMessage(event)">
+          <input type="text" placeholder="Your name" required />
+          <input type="email" placeholder="you@company.com" required />
+          <textarea placeholder="Tell us what you need help with" required></textarea>
+          <button class="scan-btn" type="submit">Send message →</button>
+          <div class="form-success" id="contact-success" style="display:none;">Message sent — we'll get back to you soon. (Simulated — no real backend here.)</div>
+        </form>
+      </div>
+    </section>
+  </div>
+
+  <footer>KINDGUARD — AN SME SHIELD PROGRAM · WEBSITE SECURITY, SCANNED IN SECONDS</footer>
+</div>
+
+<script>
+// ---------- tiny deterministic RNG so the same URL gives the same "result" ----------
+function hashStr(s){let h=0;for(let i=0;i<s.length;i++){h=(h<<5)-h+s.charCodeAt(i);h|=0;}return Math.abs(h);}
+function makeRng(seed){let s=seed%2147483647;if(s<=0)s+=2147483646;return function(){s=(s*16807)%2147483647;return (s-1)/2147483646;};}
+
+const CHECK_META={
+  ssl:{title:"Encryption strength (SSL/TLS)", weight:25, pass:"Valid certificate issued by a trusted authority, expires in 74 days.", warn:"Certificate is valid but expires in 9 day(s).", fail:"Could not establish a secure connection.", fix:"Renew your SSL certificate through your host or Let's Encrypt."},
+  headers:{title:"Security headers", weight:25, pass:"All baseline security headers are present.", warn:"Missing 1 header: Content-Security-Policy.", fail:"Missing 3 of 4 baseline security headers.", fix:"Add Strict-Transport-Security — it forces browsers to always use HTTPS."},
+  malware:{title:"Hack & malware detection", weight:25, pass:"Not flagged on any known threat list.", warn:"Check skipped — no API key configured in this demo.", fail:"Flagged for: SOCIAL_ENGINEERING.", fix:"Have your site cleaned by your host, then request a re-review."},
+  blacklist:{title:"Domain reputation", weight:15, pass:"Not flagged by any reputation vendor.", warn:"Check skipped — no API key configured in this demo.", fail:"Flagged as suspicious by 2 vendor(s).", fix:"Investigate recent changes to your site and request re-review."},
+  eu:{title:"EU-aligned checklist", weight:10, pass:"Meets the baseline security checkpoints commonly expected under EU digital-resilience guidance.", warn:"1 checkpoint falls short of baseline EU digital-resilience guidance.", fail:"Multiple checkpoints fall short of baseline EU digital-resilience guidance.", fix:"Resolve the flagged items above to move this site into good standing."}
+};
+const STATUS_LABEL={pass:"Secure",warn:"Needs attention",fail:"At risk"};
+
+function simulateScan(url){
+  const rng=makeRng(hashStr(url));
+  const checks={};
+  let score=0;
+  Object.entries(CHECK_META).forEach(([key,meta])=>{
+    const r=rng();
+    const status = r<0.62?"pass":(r<0.88?"warn":"fail");
+    const mult = status==="pass"?1:(status==="warn"?0.5:0);
+    score += meta.weight*mult;
+    checks[key]={title:meta.title,status,detail:meta[status],recommendation:status!=="pass"?meta.fix:null};
+  });
+  score=Math.round(score);
+  let grade="CRITICAL";
+  if(score>=90)grade="SECURE"; else if(score>=70)grade="GOOD"; else if(score>=50)grade="AT RISK";
+  return {url,score,grade,checks,elapsedSeconds:(3+rng()*2).toFixed(1)};
+}
+
+// ---------- in-memory "history" (seeded with a couple of demo rows) ----------
+let history=[
+  {id:"seed1", url:"shopnaija.ng", score:54, grade:"AT RISK", scannedAt:new Date(Date.now()-3600e3).toISOString(), checks:simulateScan("shopnaija.ng").checks},
+  {id:"seed2", url:"oldsite.com.ng", score:22, grade:"CRITICAL", scannedAt:new Date(Date.now()-86400e3).toISOString(), checks:simulateScan("oldsite.com.ng").checks},
+];
+
+function go(view){
+  document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
+  document.getElementById('view-'+view).classList.add('active');
+  document.querySelectorAll('nav a').forEach(a=>a.classList.remove('current'));
+  const navEl=document.getElementById('nav-'+view);
+  if(navEl) navEl.classList.add('current');
+  if(view==='dashboard') renderDashboard();
+  window.scrollTo(0,0);
+}
+
+function startScan(e){
+  e.preventDefault();
+  const url=document.getElementById('scan-input').value.trim()||'yourbusiness.com';
+  const btn=document.getElementById('scan-submit');
+  btn.disabled=true; btn.textContent='Scanning…';
+  document.getElementById('pulse-url').textContent=url;
+  document.querySelectorAll('#nodes .node-dot').forEach(d=>d.className='node-dot');
+  let t=0;
+  const timer=setInterval(()=>{t+=0.1; document.getElementById('pulse-timer').textContent=t.toFixed(1)+'s';},100);
+
+  const result=simulateScan(url);
+  const order=['ssl','headers','malware','blacklist','eu'];
+  order.forEach((key,i)=>{
+    setTimeout(()=>{
+      const dot=document.querySelector('#nodes .node-dot[data-k="'+key+'"]');
+      dot.classList.add('st-'+result.checks[key].status);
+    }, 350*(i+1));
+  });
+
+  setTimeout(()=>{
+    clearInterval(timer);
+    btn.disabled=false; btn.textContent='Run scan →';
+    const entry={id:'r'+Date.now(), ...result, scannedAt:new Date().toISOString()};
+    history.unshift(entry);
+    showResults(entry);
+  }, 350*order.length + 500);
+
+  return false;
+}
+
+function showResults(entry){
+  document.getElementById('r-url').textContent=entry.url;
+  document.getElementById('r-url2').textContent=entry.url;
+  document.getElementById('r-elapsed').textContent=entry.elapsedSeconds+'s';
+  document.getElementById('r-score').textContent=entry.score;
+  document.getElementById('r-grade').textContent=entry.grade;
+  document.getElementById('r-ring').style.background=
+    'conic-gradient(var(--teal) 0deg '+(entry.score*3.6)+'deg, var(--surface-alt) '+(entry.score*3.6)+'deg 360deg)';
+
+  const nodesWrap=document.getElementById('r-nodes');
+  nodesWrap.innerHTML='';
+  Object.entries(entry.checks).forEach(([key,c])=>{
+    const label={ssl:'SSL/TLS',headers:'HEADERS',malware:'MALWARE',blacklist:'BLACKLIST',eu:'EU CHECK'}[key];
+    nodesWrap.innerHTML += '<div class="node"><div class="node-dot st-'+c.status+'"></div><div class="node-label">'+label+'</div></div>';
+  });
+
+  const passed=Object.values(entry.checks).filter(c=>c.status==='pass').length;
+  document.getElementById('r-readout').innerHTML='<b style="color:var(--teal)">'+passed+' passed</b>  ·  <b style="color:var(--gold)">'+(5-passed)+' to review</b>';
+
+  const list=document.getElementById('r-checklist');
+  list.innerHTML='';
+  Object.entries(entry.checks).forEach(([key,c])=>{
+    list.innerHTML += '<div class="check-row st-'+c.status+'"><div class="check-status">'+STATUS_LABEL[c.status]+'</div><div>'+
+      '<div class="check-title">'+c.title+'</div><div class="check-detail">'+c.detail+'</div>'+
+      (c.recommendation?'<div class="check-fix">Fix: '+c.recommendation+'</div>':'')+'</div></div>';
+  });
+
+  go('results');
+}
+
+function renderDashboard(){
+  const totalScans=history.length;
+  const sites=new Set(history.map(h=>h.url)).size;
+  const avgScore=totalScans?Math.round(history.reduce((s,h)=>s+h.score,0)/totalScans):0;
+  const threatsFlagged=history.reduce((sum,h)=>sum+Object.values(h.checks).filter(c=>c.status==='fail').length,0);
+
+  document.getElementById('d-stats').innerHTML=
+    '<div class="stat-card"><span class="stat-label">TOTAL SCANS</span><span class="stat-value">'+totalScans+'</span></div>'+
+    '<div class="stat-card"><span class="stat-label">SITES TRACKED</span><span class="stat-value">'+sites+'</span></div>'+
+    '<div class="stat-card"><span class="stat-label">AVERAGE SCORE</span><span class="stat-value">'+avgScore+'</span></div>'+
+    '<div class="stat-card"><span class="stat-label">THREATS FLAGGED</span><span class="stat-value danger">'+threatsFlagged+'</span></div>';
+
+  function timeAgo(iso){const m=Math.floor((Date.now()-new Date(iso))/60000); if(m<1)return'just now'; if(m<60)return m+' min ago'; const h=Math.floor(m/60); if(h<24)return h+' hr ago'; const d=Math.floor(h/24); return d===1?'yesterday':d+' days ago';}
+  function statusOf(grade){if(grade==='SECURE'||grade==='GOOD')return'pass'; if(grade==='AT RISK')return'warn'; return'fail';}
+  const badgeCls={pass:'ok',warn:'warn',fail:'fail'}; const badgeLbl={pass:'Secure',warn:'At risk',fail:'Critical'};
+
+  let rows='<div class="history-row history-head"><span>SITE</span><span>SCORE</span><span>STATUS</span><span>SCANNED</span></div>';
+  history.forEach(h=>{
+    const st=statusOf(h.grade);
+    rows+='<div class="history-row clickable" onclick=\'showResults('+JSON.stringify(h).replace(/'/g,"&#39;")+')\'>'+
+      '<span class="mono">'+h.url+'</span><span class="mono">'+h.score+'</span>'+
+      '<span class="badge '+badgeCls[st]+'">'+badgeLbl[st]+'</span><span class="mono">'+timeAgo(h.scannedAt)+'</span></div>';
+  });
+  document.getElementById('d-table-wrap').innerHTML = '<div class="history-table">'+rows+'</div>';
+}
+
+function sendMessage(e){
+  e.preventDefault();
+  document.getElementById('contact-success').style.display='block';
+  e.target.reset();
+  return false;
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,58 @@
+.brandmark {
+  overflow: visible;
+  flex-shrink: 0;
+}
+
+.bm-compass {
+  transform-origin: 60px 60px;
+  animation: bm-rotate 14s linear infinite;
+}
+
+.bm-ring {
+  fill: none;
+  stroke: var(--border);
+  stroke-width: 1.5;
+  stroke-dasharray: 2 5;
+}
+
+.bm-ticks line {
+  stroke: var(--teal);
+  stroke-width: 2;
+  opacity: 0.7;
+}
+
+.bm-needle {
+  fill: var(--gold);
+}
+
+.bm-shield-fill {
+  fill: var(--surface);
+  stroke: var(--teal);
+  stroke-width: 2.5;
+  animation: bm-glow 2.8s ease-in-out infinite;
+}
+
+.bm-pulse-line {
+  fill: none;
+  stroke: var(--gold);
+  stroke-width: 2.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+@keyframes bm-rotate {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@keyframes bm-glow {
+  0%, 100% { filter: drop-shadow(0 0 1px rgba(20, 106, 100, 0.2)); }
+  50% { filter: drop-shadow(0 0 8px rgba(185, 138, 46, 0.55)); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bm-compass,
+  .bm-shield-fill {
+    animation: none;
+  }
+}

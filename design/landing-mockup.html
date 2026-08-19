@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>KindGuard — Warm &amp; Human Design Preview</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,500;0,600;0,700;1,600&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#FAF6F0;
+    --surface:#FFFFFF;
+    --surface-alt:#F3EAD9;
+    --border:#E5D8C4;
+    --text:#2E2620;
+    --text-muted:#8A7A66;
+    --teal:#146A64;
+    --teal-light:#E1F0EC;
+    --gold:#B98A2E;
+    --gold-light:#FBF1DD;
+    --coral:#C1503D;
+    --coral-light:#FBEAE6;
+    --font-display: 'Fraunces', Georgia, serif;
+    --font-body: 'Inter', 'Segoe UI', sans-serif;
+    --font-mono: 'JetBrains Mono', 'Courier New', monospace;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  body{background:var(--bg); color:var(--text); font-family:var(--font-body); line-height:1.6;}
+  a{color:inherit; text-decoration:none;}
+  .wrap{max-width:1180px; margin:0 auto; padding:0 32px;}
+  img{display:block; max-width:100%;}
+
+  /* HEADER */
+  header{display:flex; align-items:center; justify-content:space-between; padding:22px 0; border-bottom:1px solid var(--border);}
+  .logo{display:flex; align-items:center; gap:12px;}
+  .logo-text{display:flex; flex-direction:column; line-height:1.15;}
+  .logo-word{font-family:var(--font-display); font-weight:700; font-size:20px;}
+  .logo-tag{font-family:var(--font-mono); font-size:8.5px; color:var(--text-muted); letter-spacing:0.08em;}
+  nav{display:flex; gap:30px; font-size:14.5px; color:var(--text-muted);}
+  nav a{padding:6px 2px; border-bottom:2px solid transparent; transition:color .15s ease, border-color .15s ease;}
+  nav a:hover{color:var(--teal); border-color:var(--teal);}
+  .nav-cta{background:var(--teal); color:#FFFDF9; font-weight:600; font-size:14px; padding:10px 20px; border-radius:8px; font-family:var(--font-body); transition:transform .15s ease, box-shadow .15s ease, background .15s ease;}
+  .nav-cta:hover{background:#0F5651; transform:translateY(-1px); box-shadow:0 6px 16px rgba(20,106,100,0.25);}
+
+  /* BRANDMARK — rotating compass + gently glowing shield, retuned for a light theme */
+  .brandmark{overflow:visible;}
+  .bm-compass{transform-origin:60px 60px; animation:bm-rotate 14s linear infinite;}
+  .bm-ring{fill:none; stroke:var(--border); stroke-width:1.5; stroke-dasharray:2 5;}
+  .bm-ticks line{stroke:var(--teal); stroke-width:2; opacity:0.7;}
+  .bm-needle{fill:var(--gold);}
+  .bm-shield-fill{fill:var(--surface); stroke:var(--teal); stroke-width:2.5; animation:bm-glow 2.8s ease-in-out infinite;}
+  .bm-pulse-line{fill:none; stroke:var(--gold); stroke-width:2.5; stroke-linecap:round; stroke-linejoin:round;}
+  @keyframes bm-rotate{from{transform:rotate(0deg);} to{transform:rotate(360deg);}}
+  @keyframes bm-glow{
+    0%,100%{filter:drop-shadow(0 0 1px rgba(20,106,100,0.2));}
+    50%{filter:drop-shadow(0 0 8px rgba(185,138,46,0.55));}
+  }
+  @media (prefers-reduced-motion: reduce){ .bm-compass, .bm-shield-fill{animation:none;} }
+
+  /* HERO */
+  .hero{display:grid; grid-template-columns:1fr 1fr; gap:60px; align-items:center; padding:64px 0 84px;}
+  .eyebrow{display:inline-flex; align-items:center; gap:8px; font-family:var(--font-mono); font-size:11.5px; letter-spacing:0.06em; color:var(--teal); background:var(--teal-light); border:1px solid rgba(20,106,100,0.2); padding:6px 12px; border-radius:20px; margin-bottom:22px;}
+  .eyebrow .dot{width:6px; height:6px; border-radius:50%; background:var(--teal); animation:blink 1.6s infinite;}
+  @keyframes blink{0%,100%{opacity:1;} 50%{opacity:0.3;}}
+  h1{font-family:var(--font-display); font-weight:600; font-size:46px; line-height:1.12; letter-spacing:-0.01em; margin-bottom:20px;}
+  h1 em{color:var(--teal); font-style:italic;}
+  .sub{color:var(--text-muted); font-size:16.5px; max-width:460px; margin-bottom:32px;}
+  .scan-box{display:flex; align-items:center; background:var(--surface); border:1px solid var(--border); border-radius:10px; padding:6px; max-width:460px; box-shadow:0 1px 2px rgba(46,38,32,0.04);}
+  .scan-box input{flex:1; background:transparent; border:none; outline:none; color:var(--text); font-family:var(--font-mono); font-size:14px; padding:12px 14px;}
+  .scan-box input::placeholder{color:var(--text-muted);}
+  .scan-btn{background:var(--teal); color:#FFFDF9; border:none; font-family:var(--font-body); font-weight:600; font-size:14px; padding:12px 22px; border-radius:7px; cursor:pointer; white-space:nowrap; transition:background .15s ease, transform .15s ease, box-shadow .15s ease;}
+  .scan-btn:hover{background:#0F5651; transform:translateY(-1px); box-shadow:0 6px 16px rgba(20,106,100,0.25);}
+  .scan-btn:active{transform:translateY(0); box-shadow:none;}
+  .fine{font-size:12.5px; color:var(--text-muted); margin-top:12px; font-family:var(--font-mono);}
+
+  .pulse-panel{background:var(--surface); border:1px solid var(--border); border-radius:14px; padding:28px; position:relative; overflow:hidden; box-shadow:0 1px 3px rgba(46,38,32,0.05);}
+  .pulse-head{display:flex; justify-content:space-between; align-items:center; font-family:var(--font-mono); font-size:11.5px; color:var(--text-muted); margin-bottom:22px;}
+  .pulse-head .url{color:var(--teal);}
+  .pulse-track{position:relative; height:150px; margin-bottom:8px;}
+  .track-line{position:absolute; top:50%; left:0; right:0; height:1px; background:var(--border); transform:translateY(-50%);}
+  .sweep{position:absolute; top:0; bottom:0; width:2px; background:linear-gradient(180deg, transparent, var(--teal), transparent); animation:sweep 4s linear infinite;}
+  @keyframes sweep{0%{left:0%;} 100%{left:100%;}}
+  .nodes{position:absolute; top:50%; left:0; right:0; display:flex; justify-content:space-between; transform:translateY(-50%);}
+  .node{display:flex; flex-direction:column; align-items:center; gap:10px; width:70px;}
+  .node-dot{width:14px; height:14px; border-radius:50%; background:var(--surface-alt); border:2px solid var(--border); animation:light 4s linear infinite;}
+  .node-label{font-family:var(--font-mono); font-size:10px; color:var(--text-muted); text-align:center;}
+  .node:nth-child(1) .node-dot{animation-delay:0s;} .node:nth-child(2) .node-dot{animation-delay:0.55s;}
+  .node:nth-child(3) .node-dot{animation-delay:1.1s;} .node:nth-child(4) .node-dot{animation-delay:1.65s;}
+  .node:nth-child(5) .node-dot{animation-delay:2.2s;}
+  @keyframes light{0%,3%{background:var(--teal); border-color:var(--teal);} 12%,100%{background:var(--surface-alt); border-color:var(--border);}}
+  .pulse-readout{font-family:var(--font-mono); font-size:12px; color:var(--text-muted); display:flex; justify-content:space-between; border-top:1px solid var(--border); padding-top:16px; margin-top:14px;}
+  .pulse-readout b{color:var(--teal); font-weight:700;}
+
+  /* PHOTO SECTION — new: humanizes the product */
+  .people-block{padding:20px 0 84px; border-top:1px solid var(--border);}
+  .people-grid{display:grid; grid-template-columns:0.9fr 1.1fr; gap:50px; align-items:center; margin-top:34px;}
+  .people-photo{position:relative; border-radius:16px; overflow:hidden; aspect-ratio:4/3; min-height:340px; box-shadow:0 8px 24px rgba(46,38,32,0.08);}
+  .people-photo img{width:100%; height:100%; object-fit:cover;}
+  .people-photo::after{content:""; position:absolute; inset:0; background:linear-gradient(160deg, rgba(20,106,100,0.35), rgba(185,138,46,0.25)); mix-blend-mode:multiply;}
+  .people-copy h2{font-family:var(--font-display); font-size:27px; font-weight:600; margin-bottom:14px; line-height:1.25;}
+  .people-copy p{color:var(--text-muted); font-size:15px; margin-bottom:18px;}
+  .people-points{display:flex; flex-direction:column; gap:12px;}
+  .people-point{display:flex; gap:10px; align-items:flex-start; font-size:14px;}
+  .people-point .mark{color:var(--teal); font-weight:700; flex-shrink:0;}
+
+  /* SECTION SHARED */
+  section.block{padding:60px 0 90px; border-top:1px solid var(--border);}
+  .section-tag{font-family:var(--font-mono); font-size:11.5px; color:var(--teal); letter-spacing:0.08em; margin-bottom:10px;}
+  .block h2{font-family:var(--font-display); font-weight:600; font-size:28px; margin-bottom:40px; max-width:620px;}
+
+  /* FEATURES */
+  .feat-grid{display:grid; grid-template-columns:repeat(3, 1fr); gap:20px;}
+  .feat-card{background:var(--surface); border:1px solid var(--border); border-radius:12px; padding:26px; transition:box-shadow .15s ease, transform .15s ease;}
+  .feat-card:hover{box-shadow:0 8px 20px rgba(46,38,32,0.07); transform:translateY(-2px);}
+  .feat-icon{width:36px; height:36px; border-radius:8px; background:var(--teal-light); border:1px solid rgba(20,106,100,0.2); display:flex; align-items:center; justify-content:center; color:var(--teal); font-family:var(--font-mono); font-weight:700; font-size:14px; margin-bottom:16px;}
+  .feat-card h3{font-family:var(--font-display); font-weight:600; font-size:16.5px; margin-bottom:8px;}
+  .feat-card p{font-size:13.5px; color:var(--text-muted); line-height:1.6;}
+
+  .score-strip{display:flex; align-items:center; justify-content:space-between; background:var(--surface); border:1px solid var(--border); border-radius:14px; padding:30px 34px; margin-top:20px;}
+  .score-left{display:flex; align-items:center; gap:22px;}
+  .score-ring{width:74px; height:74px; border-radius:50%; background:conic-gradient(var(--teal) 0deg 306deg, var(--surface-alt) 306deg 360deg); display:flex; align-items:center; justify-content:center;}
+  .score-ring-inner{width:58px; height:58px; border-radius:50%; background:var(--surface); display:flex; flex-direction:column; align-items:center; justify-content:center;}
+  .score-ring-inner b{font-family:var(--font-display); font-size:18px; color:var(--teal);}
+  .score-ring-inner span{font-size:8.5px; color:var(--text-muted); letter-spacing:0.04em;}
+  .score-text b{font-family:var(--font-display); font-weight:600; font-size:16px; display:block; margin-bottom:4px;}
+  .score-text span{font-size:13px; color:var(--text-muted);}
+  .badge-row{display:flex; gap:8px;}
+  .badge{font-family:var(--font-mono); font-size:11px; padding:6px 10px; border-radius:6px; border:1px solid;}
+  .badge.ok{color:var(--teal); border-color:rgba(20,106,100,0.25); background:var(--teal-light);}
+  .badge.warn{color:var(--gold); border-color:rgba(185,138,46,0.3); background:var(--gold-light);}
+  .badge.fail{color:var(--coral); border-color:rgba(193,80,61,0.3); background:var(--coral-light);}
+
+  /* DASHBOARD */
+  .stats-grid{display:grid; grid-template-columns:repeat(4, 1fr); gap:16px; margin-bottom:16px;}
+  .stat-card{background:var(--surface); border:1px solid var(--border); border-radius:12px; padding:20px;}
+  .stat-label{display:block; font-family:var(--font-mono); font-size:10.5px; color:var(--text-muted); margin-bottom:10px; letter-spacing:0.05em;}
+  .stat-value{font-family:var(--font-display); font-size:26px; font-weight:600;}
+  .stat-value.danger{color:var(--coral);}
+  .history-table{background:var(--surface); border:1px solid var(--border); border-radius:12px; overflow:hidden;}
+  .history-row{display:grid; grid-template-columns:2fr 1fr 1.2fr 1fr; gap:12px; padding:15px 20px; align-items:center; font-size:13.5px; transition:background .12s ease;}
+  .history-row + .history-row{border-top:1px solid var(--border);}
+  .history-head{font-family:var(--font-mono); font-size:10.5px; color:var(--text-muted); letter-spacing:0.05em;}
+  .history-row:not(.history-head):hover{background:var(--surface-alt); cursor:pointer;}
+  .mono{font-family:var(--font-mono); font-size:13px;}
+
+  /* PREMIUM */
+  .pricing-grid{display:grid; grid-template-columns:1fr 1fr; gap:20px; max-width:720px;}
+  .price-card{background:var(--surface); border:1px solid var(--border); border-radius:14px; padding:30px; position:relative;}
+  .price-card-featured{border:2px solid var(--teal);}
+  .price-badge{position:absolute; top:-12px; left:24px; background:var(--gold); color:#3A2A08; font-family:var(--font-mono); font-size:10.5px; font-weight:700; padding:4px 10px; border-radius:5px;}
+  .price-name{font-family:var(--font-mono); font-size:12px; color:var(--text-muted); letter-spacing:0.06em; margin-bottom:10px;}
+  .price-amount{font-family:var(--font-display); font-size:30px; font-weight:600; margin-bottom:20px;}
+  .price-amount span{font-size:14px; color:var(--text-muted); font-weight:400; font-family:var(--font-body);}
+  .price-features{list-style:none; margin-bottom:26px;}
+  .price-features li{font-size:13.5px; color:var(--text-muted); padding:8px 0; border-top:1px solid var(--border);}
+  .price-features li:first-child{border-top:none;}
+  .price-features li::before{content:"✓ "; color:var(--teal); font-weight:700;}
+  .ghost-btn{background:transparent; border:1px solid var(--border); color:var(--text-muted); padding:10px 18px; border-radius:7px; font-family:var(--font-body); font-weight:600; font-size:13.5px; width:100%; cursor:pointer; transition:border-color .15s ease, color .15s ease;}
+  .ghost-btn:not(:disabled):hover{border-color:var(--teal); color:var(--teal);}
+
+  /* CONTACT */
+  .contact-grid{display:grid; grid-template-columns:0.7fr 0.7fr 1.1fr; gap:20px;}
+  .contact-photo{border-radius:14px; overflow:hidden; position:relative; min-height:280px;}
+  .contact-photo img{width:100%; height:100%; object-fit:cover; min-height:220px;}
+  .contact-photo::after{content:""; position:absolute; inset:0; background:linear-gradient(200deg, rgba(20,106,100,0.3), rgba(185,138,46,0.2)); mix-blend-mode:multiply;}
+  .contact-info{background:var(--surface); border:1px solid var(--border); border-radius:14px; padding:26px; height:fit-content;}
+  .contact-item{padding:14px 0; border-top:1px solid var(--border);}
+  .contact-item:first-child{border-top:none; padding-top:0;}
+  .contact-label{display:block; font-family:var(--font-mono); font-size:10.5px; color:var(--text-muted); letter-spacing:0.05em; margin-bottom:6px;}
+  .contact-form{background:var(--surface); border:1px solid var(--border); border-radius:14px; padding:26px; display:flex; flex-direction:column; gap:12px;}
+  .contact-form input, .contact-form textarea{background:var(--bg); border:1px solid var(--border); border-radius:8px; padding:12px 14px; color:var(--text); font-family:var(--font-body); font-size:14px; outline:none; transition:border-color .15s ease, box-shadow .15s ease;}
+  .contact-form input:focus, .contact-form textarea:focus{border-color:var(--teal); box-shadow:0 0 0 3px rgba(20,106,100,0.12);}
+  .contact-form textarea{resize:vertical; min-height:90px; font-family:var(--font-body);}
+  .contact-form input::placeholder, .contact-form textarea::placeholder{color:var(--text-muted);}
+
+  footer{border-top:1px solid var(--border); padding:28px 0; text-align:center; font-family:var(--font-mono); font-size:11.5px; color:var(--text-muted);}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <div class="logo">
+      <svg class="brandmark" width="34" height="34" viewBox="0 0 120 120" role="img" aria-label="KindGuard logo">
+        <g class="bm-compass">
+          <circle cx="60" cy="60" r="52" class="bm-ring"></circle>
+          <g class="bm-ticks">
+            <line x1="60" y1="10" x2="60" y2="18" transform="rotate(0 60 60)"></line>
+            <line x1="60" y1="10" x2="60" y2="18" transform="rotate(30 60 60)"></line>
+            <line x1="60" y1="10" x2="60" y2="18" transform="rotate(60 60 60)"></line>
+            <line x1="60" y1="10" x2="60" y2="18" transform="rotate(90 60 60)"></line>
+            <line x1="60" y1="10" x2="60" y2="18" transform="rotate(120 60 60)"></line>
+            <line x1="60" y1="10" x2="60" y2="18" transform="rotate(150 60 60)"></line>
+            <line x1="60" y1="10" x2="60" y2="18" transform="rotate(180 60 60)"></line>
+            <line x1="60" y1="10" x2="60" y2="18" transform="rotate(210 60 60)"></line>
+            <line x1="60" y1="10" x2="60" y2="18" transform="rotate(240 60 60)"></line>
+            <line x1="60" y1="10" x2="60" y2="18" transform="rotate(270 60 60)"></line>
+            <line x1="60" y1="10" x2="60" y2="18" transform="rotate(300 60 60)"></line>
+            <line x1="60" y1="10" x2="60" y2="18" transform="rotate(330 60 60)"></line>
+          </g>
+          <polygon points="60,14 65,26 55,26" class="bm-needle"></polygon>
+        </g>
+        <g class="bm-shield">
+          <path d="M60,28 L82,37 L82,58 C82,76 71,87 60,93 C49,87 38,76 38,58 L38,37 Z" class="bm-shield-fill"></path>
+          <polyline points="42,63 50,63 54,53 60,72 66,58 71,63 78,63" class="bm-pulse-line"></polyline>
+        </g>
+      </svg>
+      <div class="logo-text">
+        <span class="logo-word">KindGuard</span>
+        <span class="logo-tag">SME SHIELD PROGRAM</span>
+      </div>
+    </div>
+    <nav>
+      <a href="#dashboard">Dashboard</a>
+      <a href="#premium">Premium</a>
+      <a href="#contact">Contact</a>
+    </nav>
+    <a class="nav-cta" href="#">Scan your site</a>
+  </header>
+
+  <section class="hero">
+    <div>
+      <div class="eyebrow"><span class="dot"></span>LIVE SCAN ENGINE</div>
+      <h1>Know your site's<br><em>security pulse</em><br>before anyone else does.</h1>
+      <p class="sub">Scan any website in seconds. See if it's been hacked, how strong its defenses are, and exactly what to fix to meet EU-grade security standards.</p>
+      <div class="scan-box">
+        <input type="text" placeholder="yourbusiness.com" />
+        <button class="scan-btn">Run scan →</button>
+      </div>
+      <div class="fine">No signup required · 3 free scans a month</div>
+    </div>
+
+    <div class="pulse-panel">
+      <div class="pulse-head"><span>SCANNING <span class="url">yourbusiness.com</span></span><span>04.2s</span></div>
+      <div class="pulse-track">
+        <div class="track-line"></div>
+        <div class="sweep"></div>
+        <div class="nodes">
+          <div class="node"><div class="node-dot"></div><div class="node-label">SSL/TLS</div></div>
+          <div class="node"><div class="node-dot"></div><div class="node-label">HEADERS</div></div>
+          <div class="node"><div class="node-dot"></div><div class="node-label">MALWARE</div></div>
+          <div class="node"><div class="node-dot"></div><div class="node-label">BLACKLIST</div></div>
+          <div class="node"><div class="node-dot"></div><div class="node-label">EU CHECK</div></div>
+        </div>
+      </div>
+      <div class="pulse-readout"><span>5 checkpoints</span><span><b>0 threats</b> detected so far</span></div>
+    </div>
+  </section>
+
+  <section class="people-block">
+    <div class="section-tag">WHO IT'S FOR</div>
+    <div class="people-grid">
+      <div class="people-photo">
+        <img src="https://picsum.photos/seed/kindguard-owner/700/525" alt="Small business owner working on a laptop" />
+      </div>
+      <div class="people-copy">
+        <h2>Built for the shop owner, not the IT department.</h2>
+        <p>You don't need to know what SSL stands for. You just need to know if your site is safe, and what to do if it isn't. That's the whole job.</p>
+        <div class="people-points">
+          <div class="people-point"><span class="mark">✓</span> Plain-language reports, no jargon</div>
+          <div class="people-point"><span class="mark">✓</span> Three free scans every month, no card required</div>
+          <div class="people-point"><span class="mark">✓</span> A real person to talk to when you're stuck</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="block">
+    <div class="section-tag">WHAT KINDGUARD CHECKS</div>
+    <h2>Five checkpoints. One plain-language score.</h2>
+    <div class="feat-grid">
+      <div class="feat-card"><div class="feat-icon">01</div><h3>Hack &amp; malware detection</h3><p>Flags if your site is already compromised, defaced, or listed on a malware/blacklist database.</p></div>
+      <div class="feat-card"><div class="feat-icon">02</div><h3>Encryption strength</h3><p>Checks your SSL/TLS certificate setup and flags weak or expiring configurations.</p></div>
+      <div class="feat-card"><div class="feat-icon">03</div><h3>Security headers</h3><p>Verifies the browser-level protections that stop common attacks before they start.</p></div>
+      <div class="feat-card"><div class="feat-icon">04</div><h3>Domain reputation</h3><p>Looks up blacklist status and domain trust signals used by browsers and search engines.</p></div>
+      <div class="feat-card"><div class="feat-icon">05</div><h3>EU-aligned checklist</h3><p>Maps findings to the baseline expectations in EU digital-resilience regulation, in plain language.</p></div>
+      <div class="feat-card"><div class="feat-icon">06</div><h3>Fix-it action plan</h3><p>Every issue comes with a short, non-technical explanation and next step, no jargon.</p></div>
+    </div>
+    <div class="score-strip">
+      <div class="score-left">
+        <div class="score-ring"><div class="score-ring-inner"><b>85</b><span>SECURE</span></div></div>
+        <div class="score-text"><b>yourbusiness.com</b><span>Last scanned 2 minutes ago</span></div>
+      </div>
+      <div class="badge-row"><div class="badge ok">SSL valid</div><div class="badge ok">Not blacklisted</div><div class="badge warn">2 headers missing</div></div>
+    </div>
+  </section>
+
+  <section class="block" id="dashboard">
+    <div class="section-tag">DASHBOARD</div>
+    <h2>Every scan, tracked in one place.</h2>
+    <div class="stats-grid">
+      <div class="stat-card"><span class="stat-label">TOTAL SCANS</span><span class="stat-value">128</span></div>
+      <div class="stat-card"><span class="stat-label">SITES TRACKED</span><span class="stat-value">34</span></div>
+      <div class="stat-card"><span class="stat-label">AVERAGE SCORE</span><span class="stat-value">78</span></div>
+      <div class="stat-card"><span class="stat-label">THREATS FLAGGED</span><span class="stat-value danger">6</span></div>
+    </div>
+    <div class="history-table">
+      <div class="history-row history-head"><span>SITE</span><span>SCORE</span><span>STATUS</span><span>SCANNED</span></div>
+      <div class="history-row"><span class="mono">yourbusiness.com</span><span class="mono">85</span><span class="badge ok">Secure</span><span class="mono">2 min ago</span></div>
+      <div class="history-row"><span class="mono">shopnaija.ng</span><span class="mono">54</span><span class="badge warn">At risk</span><span class="mono">1 hr ago</span></div>
+      <div class="history-row"><span class="mono">oldsite.com.ng</span><span class="mono">22</span><span class="badge fail">Critical</span><span class="mono">Yesterday</span></div>
+    </div>
+  </section>
+
+  <section class="block" id="premium">
+    <div class="section-tag">PREMIUM</div>
+    <h2>More coverage for sites that can't afford surprises.</h2>
+    <div class="pricing-grid">
+      <div class="price-card">
+        <div class="price-name">FREE</div>
+        <div class="price-amount">₦0</div>
+        <ul class="price-features"><li>3 scans per month</li><li>Full security report</li><li>EU-aligned checklist</li></ul>
+        <button class="ghost-btn">Current plan</button>
+      </div>
+      <div class="price-card price-card-featured">
+        <div class="price-badge">MOST POPULAR</div>
+        <div class="price-name">PREMIUM</div>
+        <div class="price-amount">Custom<span> — talk to us</span></div>
+        <ul class="price-features"><li>Unlimited scans</li><li>Scheduled monitoring + email alerts</li><li>Downloadable PDF reports</li><li>Priority security assistance</li></ul>
+        <button class="scan-btn" style="width:100%;">Talk to us →</button>
+      </div>
+    </div>
+  </section>
+
+  <section class="block" id="contact">
+    <div class="section-tag">CONTACT</div>
+    <h2>Need hands-on help securing your site?</h2>
+    <div class="contact-grid">
+      <div class="contact-photo">
+        <img src="https://picsum.photos/seed/kindguard-support/400/500" alt="Support team member" />
+      </div>
+      <div class="contact-info">
+        <div class="contact-item"><span class="contact-label">EMAIL</span><span class="mono">hello@kindguard.app</span></div>
+        <div class="contact-item"><span class="contact-label">WHATSAPP</span><span class="mono">+234 000 000 0000</span></div>
+        <div class="contact-item"><span class="contact-label">RESPONSE TIME</span><span>Within 1 business day</span></div>
+      </div>
+      <form class="contact-form">
+        <input type="text" placeholder="Your name" />
+        <input type="email" placeholder="you@company.com" />
+        <textarea placeholder="Tell us what you need help with"></textarea>
+        <button class="scan-btn" type="button">Send message →</button>
+      </form>
+    </div>
+  </section>
+
+  <footer>KINDGUARD — AN SME SHIELD PROGRAM · WEBSITE SECURITY, SCANNED IN SECONDS</footer>
+</div>
+</body>
+</html>

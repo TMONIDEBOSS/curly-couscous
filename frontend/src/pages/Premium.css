@@ -1,0 +1,127 @@
+.premium-hero {
+  text-align: center;
+  padding: 70px 0 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.premium-hero h1 {
+  font-family: var(--font-display);
+  font-size: 34px;
+  font-weight: 600;
+  margin: 20px 0 10px;
+}
+
+.premium-hero .sub {
+  color: var(--text-muted);
+  font-size: 15.5px;
+  max-width: 480px;
+}
+
+.pricing-block {
+  padding: 50px 0 90px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.pricing-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  max-width: 720px;
+  width: 100%;
+}
+
+.price-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 30px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+.price-card-featured {
+  border: 2px solid var(--teal);
+}
+
+.price-badge {
+  position: absolute;
+  top: -12px;
+  left: 24px;
+  background: var(--gold);
+  color: #3A2A08;
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 5px;
+}
+
+.price-name {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--text-muted);
+  letter-spacing: 0.06em;
+  margin-bottom: 10px;
+}
+
+.price-amount {
+  font-family: var(--font-display);
+  font-size: 30px;
+  font-weight: 600;
+  margin-bottom: 20px;
+}
+
+.price-amount span {
+  font-size: 14px;
+  color: var(--text-muted);
+  font-weight: 400;
+  font-family: var(--font-body);
+}
+
+.price-features {
+  list-style: none;
+  margin-bottom: 26px;
+  flex: 1;
+}
+
+.price-features li {
+  font-size: 13.5px;
+  color: var(--text-muted);
+  padding: 8px 0;
+  border-top: 1px solid var(--border);
+}
+
+.price-features li:first-child {
+  border-top: none;
+}
+
+.price-features li::before {
+  content: "✓ ";
+  color: var(--teal);
+  font-weight: 700;
+}
+
+.premium-cta {
+  text-align: center;
+  display: block;
+}
+
+.pricing-note {
+  color: var(--text-muted);
+  font-size: 12.5px;
+  font-family: var(--font-mono);
+  max-width: 500px;
+  text-align: center;
+  margin-top: 24px;
+}
+
+@media (max-width: 720px) {
+  .pricing-grid {
+    grid-template-columns: 1fr;
+  }
+}
